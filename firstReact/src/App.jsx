@@ -5,9 +5,10 @@ import './App.css'
 import Search  from './components/search.jsx'
 
 const API_BASE_URL = 'https://api.themoviedb.org/3'
+
 const API_KEY = import.meta.env.VITE_API_KEY
 
-API_OPTIONS = {
+const API_OPTIONS = {
   method: 'GET',
   headers: {
     accept: 'application/json',
@@ -22,9 +23,15 @@ function App() {
 
   const [errorMessage, setErrorMessage] = useState('')
 
+  const [Movies, setMovies] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+
   const fetchMovies = async () => {
+    setIsLoading(true)
+    setErrorMessage('')
     try {
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
+      const endpoint = `${API_BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`
+      console.log(endpoint)
       const response = await fetch(endpoint, API_OPTIONS)
       if (!response.ok) {
       throw new Error('Error fetching movies') 
@@ -32,16 +39,25 @@ function App() {
       const data = await response.json()
       console.log(data)
 
+      if(data.response === 'False'){
+        setErrorMessage(data.Error || 'Failed to fetch movies.')
+        setMovies([])
+        return
+      }
+
+      setMovies(data.results || [])
+
 
     } catch (error) {
       console.error('Error fetching movies: ', error)
       setErrorMessage('Failed to fetch movies. Please try again later.')
+    }finally {
+      setIsLoading(false)
     }
   }
 
     useEffect( () => {
-    fetchMovies
-
+    fetchMovies()
   }
   , [])
 
