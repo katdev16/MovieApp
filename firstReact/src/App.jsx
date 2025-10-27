@@ -1,8 +1,10 @@
 import {use, useEffect, useState } from 'react'
 // import reactLogo from './assets/react.svg'
 
+
 import './App.css'
 import Search  from './components/search.jsx'
+import { MovieCard } from './components/MovieCard.jsx'
 
 const API_BASE_URL = 'https://api.themoviedb.org/3'
 
@@ -13,6 +15,7 @@ const API_OPTIONS = {
   headers: {
     accept: 'application/json',
     Authorization: `Bearer ${API_KEY}`
+    
   }
 }
 
@@ -74,9 +77,22 @@ function App() {
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
         </header>
         <section className='all-movies'>
-          <h2>ALL Movies</h2>
+          <h2 className='mt-[40px]'>ALL Movies</h2>
 
-          {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
+          {isLoading ? (
+            <p>Loading movies...</p>
+          ) : errorMessage ? (
+            <p className='text-red-500'>{errorMessage}</p>
+          ) : (
+            <ul>
+              {Movies.map((movie) => (
+                <MovieCard key={movie.id} movie={movie}></MovieCard>
+              ))}
+                 
+            </ul>
+          )}
+
+          {/* {errorMessage && <p className='text-red-500'>{errorMessage}</p>} */}
         </section>
 
       </div>
