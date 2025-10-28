@@ -8,7 +8,8 @@ import { MovieCard } from './components/MovieCard.jsx'
 
 const API_BASE_URL = 'https://api.themoviedb.org/3'
 
-const API_KEY = import.meta.env.VITE_API_KEY
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY
+console.log('API Key:', API_KEY)
 
 const API_OPTIONS = {
   method: 'GET',
