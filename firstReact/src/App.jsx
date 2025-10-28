@@ -30,11 +30,13 @@ function App() {
   const [Movies, setMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (query = '') => {
     setIsLoading(true)
     setErrorMessage('')
     try {
-      const endpoint = `${API_BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`
+      const endpoint = query
+      ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      :`${API_BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`
       console.log(endpoint)
       const response = await fetch(endpoint, API_OPTIONS)
       if (!response.ok) {
@@ -61,9 +63,9 @@ function App() {
   }
 
     useEffect( () => {
-    fetchMovies()
+    fetchMovies(searchTerm)
   }
-  , [])
+  , [searchTerm])
 
 
   return (
