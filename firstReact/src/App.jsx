@@ -6,6 +6,7 @@ import './App.css'
 import Search  from './components/search.jsx'
 import {useDebounce} from 'react-use'
 import { MovieCard } from './components/MovieCard.jsx'
+import { updateSearchCount } from './appwrite.js'
 
 const API_BASE_URL = 'https://api.themoviedb.org/3'
 
@@ -56,6 +57,8 @@ function App() {
       }
 
       setMovies(data.results || [])
+
+      updateSearchCount()
 
 
     } catch (error) {
